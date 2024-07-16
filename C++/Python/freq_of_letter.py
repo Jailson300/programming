@@ -1,6 +1,0 @@
-str = input("Enter a string: ")
-print("a occured :",str.count("a"))
-print("e occured :",str.count("e"))
-print("i occured :",str.count("i"))
-print("o occured :",str.count("o"))
-print("u occured :",str.count("u"))
