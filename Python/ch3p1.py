@@ -7,3 +7,6 @@ movies.append(mov)
 mov = input("Enter 3st movies  : ")
 movies.append(mov)
 print(movies)
+
+movies.sort()
+print(movies)
