@@ -2,6 +2,7 @@
 #include<stdlib.h>
 
 void beginsert(int item);
+void traverse();
 
 struct node{
     int data;
@@ -13,11 +14,12 @@ struct node *head=NULL;
 int main(){
     int choice,item;
     do{
-        printf("Enter item to be inserted: ");
+        printf("\nEnter item to be inserted: ");
         scanf("%d",&item);
         beginsert(item);
         printf("\n Press 0 to insert more items : ");
         scanf("%d",&choice);
+        traverse();
     }
     while(choice==0);
     return 0;
@@ -34,4 +36,22 @@ void beginsert(int item){
         head=ptr;
         printf("\n Node Inserted \n");
     }
+}
+
+void traverse(){
+  struct node *ptr;
+  ptr = head;
+  if(ptr == NULL)
+  {
+  printf("Empty list..");
+  }
+  else
+  {
+    printf("printing values ........ \n");
+    while (ptr!=NULL)
+    {
+     printf("\n%d",ptr->data);
+     ptr = ptr -> next;
+    }
+  }
 }
