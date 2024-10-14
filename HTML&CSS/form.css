@@ -63,3 +63,11 @@ fieldset:last-of-type{
     border-color: white;
     min-width: 300px;
  }
+
+ input[type="File"]{
+    padding: 1px 2px;
+ }
+
+ a{
+    color: #dfdfe2;
+ }
