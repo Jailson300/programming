@@ -4,14 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="surveyform.css">
 </head>
 <body>
+    <div class="container">
+      <header class="header">
     <h1 id="title">Survey Form</h1>
     <p id="description">Thank You for taking this survey</p>
+    </header>
   <form id="survey-form">
+    <div class="form-group">
     <label id="name-label"> Name: <input id="name" type="text" required placeholder="Enter Name"></label>
+    </div>
+    <div class="form-group">
     <label id="email-label"> Email:<input id="email" type="email" required placeholder="Enter Email"></label>
+    </div>
+    <div class="form-group">
     <label id="number-label"> Age:<input id="number" type="number" min="2" max="20" placeholder="Enter Age"></label>
+    </div>
     <select id="dropdown">
       <option></option>
       <option></option>
@@ -20,8 +30,17 @@
     <input type="radio" value="female" name="gender">
     <input type="checkbox" value="front-end">
     <input type="checkbox" value="back-end">
-    <textarea></textarea>
+    <div class="form-group">
+        <p>Any comments or suggestions?</p>
+        <textarea
+          id="comments"
+          class="input-textarea"
+          name="comment"
+          placeholder="Enter your comment here..."
+        ></textarea>
+      </div>
     <input type="submit" id="submit">
   </form>
+</div>
 </body>
 </html>
