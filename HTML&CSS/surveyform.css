@@ -166,7 +166,7 @@ form {
 .input-textarea {
   min-height: 120px;
   width: 100%;
-  padding: 0.625rem;
+  padding: 1em;
   resize: vertical;
 }
 
@@ -178,4 +178,9 @@ form {
   color: inherit;
   border-radius: 2px;
   cursor: pointer;
+}
+
+fieldset{
+  padding: 1em;
+  margin: 1.5em 1em;
 }

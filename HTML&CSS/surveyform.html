@@ -9,27 +9,49 @@
 <body>
     <div class="container">
       <header class="header">
-    <h1 id="title">Survey Form</h1>
-    <p id="description">Thank You for taking this survey</p>
+    <h1 id="title" class="text-center">Registration Form</h1>
+    <p id="description" class="description text-center">Thank You for taking this survey</p>
     </header>
   <form id="survey-form">
+    <fieldset>
+      <legend>Personal Details </legend>
     <div class="form-group">
-    <label id="name-label"> Name: <input id="name" type="text" required placeholder="Enter Name"></label>
+    <label id="name-label" for="name"> Name: <input id="name" type="text" required placeholder="Enter Name" class="form-control"></label>
     </div>
     <div class="form-group">
-    <label id="email-label"> Email:<input id="email" type="email" required placeholder="Enter Email"></label>
+    <label id="email-label" for="email"> Email:<input id="email" type="email" required placeholder="Enter Email" class="form-control"></label>
     </div>
     <div class="form-group">
-    <label id="number-label"> Age:<input id="number" type="number" min="2" max="20" placeholder="Enter Age"></label>
+    <label id="number-label" for="number"> Age:<input id="number" type="number" min="2" max="20" placeholder="Enter Age" class="form-control"></label>
     </div>
-    <select id="dropdown">
-      <option></option>
-      <option></option>
+    </fieldset>
+    <fieldset>
+      <legend>Address</legend>
+    <div class="form-group">
+      <p>Which district do you belong from?</p>
+    <select id="dropdown" class="form-control">
+      <option>Select</option>
+      <option>Churachandpur</option>
+      <option>Moreh</option>
+      <option>Jiribam</option>
     </select>
-    <input type="radio" value="male" name="gender">
-    <input type="radio" value="female" name="gender">
-    <input type="checkbox" value="front-end">
-    <input type="checkbox" value="back-end">
+    </div>
+    </fieldset>
+    <fieldset>
+    <legend>Gender</legend>
+    <div class="form-group">
+    <label><input type="radio" value="male" name="gender" class="input-radio" checked> Male</label>
+    <label><input type="radio" value="female" name="gender" class="input-radio"> Female</label>
+    </div>
+    </fieldset>
+    <fieldset>
+    <legend>Language Proficiency in</legend>
+    <div class="form-group">
+    <label><input type="checkbox" value="meiteilon" class="input-checkbox"> Meiteilon</label>
+    <label><input type="checkbox" value="hindi" class="input-checkbox"> Hindi</label>
+    <label><input type="checkbox" value="english" class="input-checkbox"> English</label>
+    </div>
+   </fieldset>
     <div class="form-group">
         <p>Any comments or suggestions?</p>
         <textarea
@@ -39,7 +61,9 @@
           placeholder="Enter your comment here..."
         ></textarea>
       </div>
-    <input type="submit" id="submit">
+      <div class="form-group">
+         <input type="submit" id="submit">
+      </div>
   </form>
 </div>
 </body>
