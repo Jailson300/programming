@@ -19,22 +19,37 @@
     <label id="name-label" for="name"> Name: <input id="name" type="text" required placeholder="Enter Name" class="form-control"></label>
     </div>
     <div class="form-group">
-    <label id="email-label" for="email"> Email:<input id="email" type="email" required placeholder="Enter Email" class="form-control"></label>
-    </div>
-    <div class="form-group">
     <label id="number-label" for="number"> Age:<input id="number" type="number" min="2" max="20" placeholder="Enter Age" class="form-control"></label>
     </div>
+    <div class="form-group">
+      <label id="email-label" for="email"> Email:<input id="email" type="email" required placeholder="Enter Email" class="form-control"></label>
+      </div>
+    <div class="form-group">
+      <label id="number-label" for="phone"> Phone No:<input id="phone" type="tel" min="10" maxlength="10" placeholder="Enter Phone Number" class="form-control"></label>
+      </div>
+
     </fieldset>
     <fieldset>
       <legend>Address</legend>
     <div class="form-group">
-      <p>Which district do you belong from?</p>
+      <p>Permanent Address:</p>
+      <input id="permanent" type="text" required class="form-control">
+    </div>
+    <div class="form-group">
+      <p>Present Address:</p>
+      <input id="present" type="text" required class="form-control">
+    </div>
+    <div class="form-group">
+    <p>District:</p>  
     <select id="dropdown" class="form-control">
       <option>Select</option>
       <option>Churachandpur</option>
       <option>Moreh</option>
       <option>Jiribam</option>
     </select>
+    </div>
+    <div class="form-group">
+      <label>P.S: <input id="ps" type="text" class="form-control"></label>
     </div>
     </fieldset>
     <fieldset>
@@ -53,12 +68,12 @@
     </div>
    </fieldset>
     <div class="form-group">
-        <p>Any comments or suggestions?</p>
+        <p>Describe Yourself</p>
         <textarea
           id="comments"
           class="input-textarea"
           name="comment"
-          placeholder="Enter your comment here..."
+          placeholder="Write something about yourself here..."
         ></textarea>
       </div>
       <div class="form-group">
