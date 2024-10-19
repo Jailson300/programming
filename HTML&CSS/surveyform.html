@@ -41,15 +41,31 @@
     </div>
     <div class="form-group">
     <p>District:</p>  
-    <select id="dropdown" class="form-control">
+    <select id="dropdown category" class="form-control"  onchange="updateSubCategory()">
       <option>Select</option>
-      <option>Churachandpur</option>
-      <option>Moreh</option>
-      <option>Jiribam</option>
+      <option value="Ccpur">Churachandpur</option>
+      <option value="noney">Noney</option>
+      <option value="tamenglong">Tamenglong</option>
+      <option value="">Imphal West</option>
+      <option value="">Imphal East</option>
+      <option value="">Thoubal</option>
+      <option value="">Bishnupur</option>
+      <option value="">Kangpokpi</option>
+      <option value="">Tengnoupal</option>
+      <option value="">Senapati</option>
+      <option value="">Ukhrul</option>
+      <option value="">Pherzawl</option>
+      <option value="">Chandel</option>
+      <option value="">Kakching</option>
+      <option value="">Jiribam</option>
     </select>
     </div>
     <div class="form-group">
-      <label>P.S: <input id="ps" type="text" class="form-control"></label>
+      <label>P.S:
+        <select id="dropdown sub-category" class="form-control">
+          <option value="">Select a sub-category</option>
+        </select>
+      </label>
     </div>
     </fieldset>
     <fieldset>
@@ -81,5 +97,34 @@
       </div>
   </form>
 </div>
+
+
+<script>
+  // Options data for sub-categories based on selected category
+  const subCategories = {
+      Ccpur: ['New bazar', 'Khumujamba', 'Zouveng', 'Thengra'],
+      noney: ['Car', 'Bike', 'Truck']
+  };
+
+  // Function to update the sub-category based on the selected category
+  function updateSubCategory() {
+      const categorySelect = document.getElementById("category");
+      const subCategorySelect = document.getElementById("subcategory");
+      const selectedCategory = categorySelect.value;
+
+      // Clear previous sub-category options
+      subCategorySelect.innerHTML = '<option value="">Select a sub-category</option>';
+
+      // If a valid category is selected, add corresponding sub-categories
+      if (selectedCategory && subCategories[selectedCategory]) {
+          subCategories[selectedCategory].forEach(function(subCategory) {
+              const option = document.createElement("option");
+              option.value = subCategory.toLowerCase();
+              option.text = subCategory;
+              subCategorySelect.appendChild(option);
+          });
+      }
+  }
+</script>
 </body>
 </html>

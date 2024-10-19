@@ -3,11 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dynamic Select Options</title>
 </head>
 <body>
-    <nav>
-        
-    </nav>
+    <h2>Select your options:</h2>
+    
+    <!-- First Select (Category) -->
+    <label for="category">Choose a category:</label>
+    <select id="category" onchange="updateSubCategory()">
+        <option value="">Select a category</option>
+        <option value="fruits">Fruits</option>
+        <option value="vehicles">Vehicles</option>
+    </select>
+
+    <br><br>
+
+    <!-- Second Select (Sub-category) -->
+    <label for="subcategory">Choose a sub-category:</label>
+    <select id="subcategory">
+        <option value="">Select a sub-category</option>
+    </select>
+
+    <script>
+        // Options data for sub-categories based on selected category
+        const subCategories = {
+            fruits: ['Apple', 'Banana', 'Orange'],
+            vehicles: ['Car', 'Bike', 'Truck']
+        };
+
+        // Function to update the sub-category based on the selected category
+        function updateSubCategory() {
+            const categorySelect = document.getElementById("category");
+            const subCategorySelect = document.getElementById("subcategory");
+            const selectedCategory = categorySelect.value;
+
+            // Clear previous sub-category options
+            subCategorySelect.innerHTML = '<option value="">Select a sub-category</option>';
+
+            // If a valid category is selected, add corresponding sub-categories
+            if (selectedCategory && subCategories[selectedCategory]) {
+                subCategories[selectedCategory].forEach(function(subCategory) {
+                    const option = document.createElement("option");
+                    option.value = subCategory.toLowerCase();
+                    option.text = subCategory;
+                    subCategorySelect.appendChild(option);
+                });
+            }
+        }
+    </script>
 </body>
 </html>
