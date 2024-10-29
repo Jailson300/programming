@@ -13,9 +13,9 @@
         <h1>HTML/CSS Quiz</h1>
         <nav>
             <ul>
-                <li><a>INFO</a></li>
-                <li><a>HTML</a></li>
-                <li><a>CSS</a></li>
+                <li><a href="#student-info">INFO</a></li>
+                <li><a href="#html-questions">HTML</a></li>
+                <li><a href="#css-questions">CSS</a></li>
             </ul>
         </nav>
     </header>
@@ -23,9 +23,32 @@
         <form method="post" action="https://freecodecamp.org/practice-project/accessibility-quiz">
             <section role="region" aria-labelledby="student-info">
                 <h2 id="student-info">Student</h2>
+                <div class="info"><label for="name">Name: </label><input id="name" type="text" name="name" placeholder="Enter your name"></div>
+                <div class="info"><label for="email">Email: </label><input id="email" type="email" name="email"></div>
+                <div class="info"><label for="date-of-birth">D.O.B: </label><input id="date-of-birth" type="date" name="d.o.b"></div>
             </section>
             <section role="region" aria-labelledby="html-questions">
                 <h2 id="html-questions">Html Questions</h2>
+                <div class="question-block">
+                    <h3><span class="sr-only">Question</span>1</h3>
+                    <fieldset class="question">
+                        <legend></legend>
+                        <ul>
+                          <li></li>
+                          <li></li>
+                        </ul>
+                    </fieldset>
+                </div>
+                <div class="question-block">
+                    <h3><span class="sr-only">Question</span>2</h3>
+                    <fieldset class="question">
+                        <legend></legend>
+                        <ul>
+                          <li></li>
+                          <li></li>
+                        </ul>
+                    </fieldset>
+                </div>
             </section>
             <section role="region" aria-labelledby="css-questions">
                 <h2 id="css-questions">Css Questions</h2>
