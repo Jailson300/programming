@@ -34,8 +34,8 @@
                     <fieldset class="question" nmae="html-questions-1">
                         <legend>Question1</legend>
                         <ul class="answers-list">
-                          <li><label><input type="radio" id="q1-a1"></label></li>
-                          <li><label><input type="radio" id="q1-a2"></label></li>
+                          <li><label for="q1-a1"><input type="radio" id="q1-a1" value="True" name="q1">True</label></li>
+                          <li><label for="q1-a2"><input type="radio" id="q1-a2" value="False" name="q1">False</label></li>
                         </ul>
                     </fieldset>
                 </div>
@@ -44,16 +44,44 @@
                     <fieldset class="question" name="html-questions-2">
                         <legend>Question2</legend>
                         <ul class="answers-list">
-                          <li><label><input type="radio" id="q2-a1"></label></li>
-                          <li><label><input type="radio" id="q2-a2"></label></li>
+                          <li><label for="q2-a1"><input type="radio" id="q2-a1" value="True" name="q2">True</label></li>
+                          <li><label for="q2-a2"><input type="radio" id="q2-a2" value="False" name="q2">False</label></li>
                         </ul>
                     </fieldset>
                 </div>
             </section>
             <section role="region" aria-labelledby="css-questions">
                 <h2 id="css-questions">Css Questions</h2>
+                <div class="formrow">
+                    <div class="question-block">
+                        <label for="selector">Can the CSS margin property accept negative values?</label>
+                    </div>
+                    <div class="answer">
+                        <select required name="selector" id="selector">
+                            <option value="">Select an option</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                    <div class="question-block">
+                        <label>Do you have any questions</label>
+                    </div>
+                    <div class="answer">
+                        <textarea rows="5" cols="25"
+                        name="text" id="text"></textarea>
+                    </div>
+                </div>
             </section>
+            <button type="submit">Send</button>
         </form>
     </main>
+    <footer>
+        <address>
+            <a href="https://freecodecamp.org">freeCodeCamp</a><br />
+            San Francisco<br />
+            California<br />
+            USA
+        </address>
+    </footer>
 </body>
 </html>
