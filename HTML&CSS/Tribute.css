@@ -8,6 +8,7 @@ body {
     max-width: 100%;
     height: auto;
     align-items: center;
+    box-shadow: 0 5px 10px;
     }
 
  #title {
@@ -34,4 +35,13 @@ body {
         #tribute-link {
             text-decoration: none;
             color: black;
+        }
+
+        #tribute-info {
+            background-color: rgb(46, 139, 87, 0.25);
+            box-shadow: 0px 10px 10px #000000;
+            font-family: Georgia;
+            padding: 25px 25px;
+            margin: 11px;
+            margin-top: 15px;
         }
