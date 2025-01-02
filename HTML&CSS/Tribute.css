@@ -1,0 +1,37 @@
+body {
+    background-color: rgb(196, 193, 193);
+    margin: 5% 20%;
+}
+
+#image{
+    display: block;
+    max-width: 100%;
+    height: auto;
+    align-items: center;
+    }
+
+ #title {
+        text-align: center;
+        text-shadow: 5px 5px 10px white;
+        font-size: 7vh;
+}
+
+ /* Setting font color and font
+        size of the image-caption */
+        #caption {
+            font-size: 17px;
+            font-family: Gill Sans;
+            color: black;
+        }
+
+        h1.title-APJ {
+            font-size: 35px;
+            color: white;
+            text-align: center;
+            text-shadow: 5px 5px 10px black;
+        }
+
+        #tribute-link {
+            text-decoration: none;
+            color: black;
+        }
