@@ -3,141 +3,463 @@
 <head>
     <title>Registration Form</title>
 </head>
-<body bgcolor="#e6e9ed">
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+        <tr>
+            <td width="20%" align="center"><img src="nielit.jpg" width="150px" height="120px"></td>
+            <td align="center">
+                <font color="blue" size="6"><b>National Institute of Electronics and Information Technology (NIELIT)</b></font><br>
+                <font size="4">Ministry of Electronic and Information Technology, Government of India</font>
+            </td>
+        </tr>
+    </table>
+    
+    <hr size="5" width="100%" color="darkblue" noshade>
+    
     <center>
-        <h2>
-        Examination Application Form: Course on Computer Concepts (CCC)
-        </h2>
+        <font size="5"><b>Examination Application Form: Course on Computer Concepts (CCC)</b></font>
     </center>
+    <p align="right"><font color="red">*</font>(Mandatory Fields)</p>
+    
     <form>
-       <fieldset>
-        <legend>1.Registration Details</legend>
-        <table bgcolor="#dae7f5" cellpadding="10px" cellspacing="2" border>
+        <fieldset>
+            <legend><b>1. Registration Details</b></legend>
+            <table width="100%" border="0" cellspacing="10" cellpadding="5" bgcolor="#dae7f5">
+                <tr>
+                    <td>
+                        <label>1.1 &nbsp; Have you got online reference number for enrollment with NIELIT/Accreditation/Extension <font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="radio" name="ref_no"> No
+                        <input type="radio" name="ref_no"> Yes
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>1.2 &nbsp; Whether Applied Previously in CCC Examination <font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="radio" name="prev_applied"> No
+                        <input type="radio" name="prev_applied"> Yes
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        
+        <fieldset>
+            <legend><font size="4"><b>2. Applicant's Personal Details</b></font></legend>
+            <table width="100%" border="0" cellspacing="10" cellpadding="5" bgcolor="#dae7f5">
+                <tr>
+                    <td>
+                        <label>2.1 &nbsp; Applicant's Full Name<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <select>
+                            <option>---Select---</option>
+                            <option>Mr.</option>
+                            <option>Ms.</option>
+                            <option>Mrs.</option>
+                        </select>
+                        <input type="text" size="40" placeholder="Enter full Name"><br>
+                        (Full name as per highest/latest qualification certificate or legal certificate)
+                    </td>
+                </tr>
+                <tr bgcolor="#c5d2e0">
+                    <td>
+                        <label>2.2 &nbsp; Care of <font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="radio" name="care_of"> Parents
+                        <input type="radio" name="care_of"> Guardian
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>2.2.1 &nbsp; Father's Name<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <select>
+                            <option>Mr.</option>
+                        </select>
+                        <input type="text" size="40" placeholder="Enter full Name"><br>
+                        <font color="red" size="3">(Full name as per Education/Legal certificate)</font>
+                    </td>
+                </tr>
+                <tr bgcolor="#c5d2e0">
+                    <td>
+                        <label>2.2.2 &nbsp; Mother's Name<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <select>
+                            <option>Ms.</option>
+                        </select>
+                        <input type="text" size="40" placeholder="Enter full Name"><br>
+                        <font color="red" size="3">(Full name as per Education/Legal certificate)</font>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>2.3 &nbsp; Gender/ लिंग<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <select>
+                            <option>---Select---</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr bgcolor="#c5d2e0">
+                    <td>
+                        <label>2.4 &nbsp; Date of Birth/ जन्म दिनांक<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="date">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>2.5 &nbsp; Category<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <select>
+                            <option>---Select one---</option>
+                            <option>General</option>
+                            <option>Scheduled Caste</option>
+                            <option>Scheduled Tribe</option>
+                            <option>Other Backward Class</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr bgcolor="#c5d2e0">
+                    <td>
+                        <label>2.6 &nbsp; Occupation<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <select>
+                            <option>---Select one---</option>
+                            <option>Government Employee</option>
+                            <option>Government Undertaking</option>
+                            <option>Self Employed</option>
+                            <option>Other</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>2.7 &nbsp; Disability<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="radio" name="disability"> No
+                        <input type="radio" name="disability"> Yes
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>2.8 &nbsp; EWS<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="radio" name="ews"> No 	
+                        <input type="radio" name="ews"> Yes
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        
+        <fieldset>
+            <legend><font size="4"><b>3. Contact Details</b></font></legend>
+            <table width="100%" border="0" cellspacing="10" cellpadding="5" bgcolor="#dae7f5">
+                <tr>
+                    <td>
+                        <label>3.1 &nbsp; Phone with STD code<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="text" size="5" placeholder="STD">
+                        <input type="text" size="15" placeholder="Number">
+                    </td>
+                </tr>
+                <tr bgcolor="#c5d2e0">
+                    <td>
+                        <label>3.2 &nbsp; Mobile<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input placeholder="+91" disabled size="5">
+                        <input type="text" size="15" placeholder="10-digit number">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>3.3 &nbsp; Email<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="text" size="40" placeholder="eg abc@gmail.com">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        
+        <fieldset>
+            <legend><font size="4"><b>4. Address Details</b></font></legend>
+            <table width="100%" border="0" cellspacing="10" cellpadding="5" bgcolor="#dae7f5">
+                <tr>
+                    <td>
+                        <label>4.1 &nbsp; Address line 1<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="text" size="50">
+                    </td>
+                </tr>
+                <tr bgcolor="#c5d2e0">
+                    <td>
+                        <label>4.2 &nbsp; Address line 2<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="text" size="50">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>4.3 &nbsp; Address line 3</label>
+                    </td>
+                    <td>
+                        <input type="text" size="50">
+                    </td>
+                </tr>
+                <tr bgcolor="#c5d2e0">
+                    <td>
+                        <label>4.4 &nbsp; City Name<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="text" size="30">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>4.5 &nbsp; State<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input placeholder="Manipur" disabled>
+                    </td>
+                </tr>
+                <tr bgcolor="#c5d2e0">
+                    <td>
+                        <label>4.6 &nbsp; District<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <select>
+                            <option>---Select---</option>
+                            <option>Imphal-West</option>
+                            <option>Imphal-East</option>
+                            <option>Bishnupur</option>
+                            <option>Thoubal</option>
+                            <option>Kakching</option>
+                            <option>Chandel</option>
+                            <option disabled>Churachandpur</option>
+                            <option>Jiribam</option>
+                            <option>Kamjong</option>
+                            <option>Kangpokpi</option>
+                            <option>Tegnoupal</option>
+                            <option>Ukhrul</option>
+                            <option>Noney</option>
+                            <option>Pherzawl</option>
+                            <option>Senapati</option>
+                            <option>Tamenglong</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>4.7 &nbsp; Pin Code<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="text" size="10">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        
+        <fieldset>
+            <legend><font size="4"><b>5. Educational / Qualification Details</b></font></legend>
+            <table width="100%" border="0" cellspacing="10" cellpadding="5" bgcolor="#dae7f5">
+                <tr>
+                    <td>
+                        <label>5.1 &nbsp; Highest Educational Qualification<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <select>
+                            <option>---Select---</option>
+                            <option>Others</option>
+                            <option>Graduation or Higher</option>
+                            <option>Polytechnic Diploma</option>
+                            <option>Below 10th</option>
+                            <option>10th Pass</option>
+                            <option>12th Pass</option>
+                            <option>10th + ITI</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr bgcolor="#c5d2e0">
+                    <td>
+                        <label>5.2 &nbsp;Year of Passing<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="text" size="10" placeholder="YYYY">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        
+        <fieldset>
+            <legend><font size="4"><b>6. Examination Details</b></font></legend>
+            <table width="100%" border="0" cellspacing="10" cellpadding="5" bgcolor="#dae7f5">
+                <tr>
+                    <td>
+                        <label>6.1 &nbsp; Applied As<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="radio" name="applied_as"> Direct
+                        <input type="radio" name="applied_as"> Institute
+                    </td>
+                </tr>
+                <tr bgcolor="#c5d2e0">
+                    <td>
+                        <label>6.2 &nbsp; Applied for Examination <font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <select>
+                            <option>---Select---</option>
+                            <option>Every Month Exam Cycle</option>
+                        </select>
+                        <select>
+                            <option>---Select---</option>
+                            <option>May, 2025</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>6.3 &nbsp; Examination Location 1<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input placeholder="Manipur" disabled>
+                        <select>
+                            <option>---Select Location---</option>
+                            <option>CHL1 - CHANDEL</option>
+                            <option>CCP - CHURACHANDPUR</option>
+                            <option>IMP - IMPHAL</option>
+                            <option>KKC - KAKCHING</option>
+                            <option>KPI1 - KANGPOKPI</option>
+                            <option>SPT - SENAPATI</option>
+                            <option>TML1 - TAMENLONG</option>
+                            <option>UKL - UKHRUL</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr bgcolor="#c5d2e0">
+                    <td>
+                        <label>6.4 &nbsp; Examination Location 2<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input placeholder="Assam" disabled>
+                        <select>
+                            <option>---Select Location---</option>
+                            <option>DHU - DHUBRI</option>
+                            <option>DIB - DIBRUGARH EXTENSION CENTER</option>
+                            <option>GUW - GUWAHATI</option>
+                            <option>JRI - JORHAT</option>
+                            <option>KOK - KOKRAJHAR</option>
+                            <option>MAJ1 - MAJULI</option>
+                            <option>UDH - SILCHAR</option>
+                            <option>TEZ - TEZPUR</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        
+        <fieldset>
+            <legend><font size="4"><b>7. Identification Details</b></font></legend>
+            <table width="100%" border="0" cellspacing="10" cellpadding="5" bgcolor="#dae7f5">
+                <tr>
+                    <td>
+                        <label>7.1 &nbsp; Aadhar Card Number <font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="text" size="20" placeholder="12-digit number">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>7.2 &nbsp; Apaar ID<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="text" size="20"><br>
+                        <a href="https://www.abc.gov.in/" target="_blank"><u>Click here to generate Apaar id</u></a>
+                    </td>
+                </tr>
+                <tr bgcolor="#c5d2e0">
+                    <td>
+                        <label>7.3 &nbsp; Upload Photo<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="file">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>7.4 &nbsp; Upload Signature<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="file">
+                    </td>
+                </tr>
+                <tr bgcolor="#c5d2e0">
+                    <td>
+                        <label>7.5 &nbsp; Upload left thumb impression<font color="red">*</font></label>
+                    </td>
+                    <td>
+                        <input type="file">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        
+        <fieldset>
+            <legend><font size="4"><b>Theme Selection</b></font></legend>
+            <table width="100%" border="0" cellspacing="10" cellpadding="5" bgcolor="#dae7f5">
+                <tr>
+                    <td colspan="2" align="center">
+                        <label>Theme:</label>
+                        <input type="color">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        
+        <fieldset>
+            <legend><font size="4"><b>8. Declaration<font color="red">*</font></b></font></legend>
+            <table width="100%" border="0" cellspacing="10" cellpadding="5" bgcolor="#dae7f5">
+                <tr bgcolor="#c5d2e0">
+                    <td colspan="2">
+                        <input type="checkbox"> <font color="red">*</font> I, hereby declare that the particulars submitted by me in the online examination application form of CCC are true to the best of my knowledge and belief. I agree to abide by the rules and regulations of NIELIT and also to the decision of NIELIT regarding my admission for the examination. I have noted that, NIELIT has the right to withhold my result even after my appearing in the examination in addition to any other action as may be deemed fit in the event of any of the statements/particulars made above being found incorrect. I have noted that, I might be required to appear in the examination at any other examination center not specified under examination center choice column (6.3,6.4). I further understand that, in the event of non-conduction /non-evaluation of my examination due to any reason whatsoever, I will not held NIELIT responsible for any damages.
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        
+        <table width="100%" border="0" cellspacing="10" cellpadding="5" bgcolor="#dae7f5">
             <tr>
-                <td>1.0</td>
-                <td>Have you got online refrence number for enrollment with NIELIT/Accrediation/Extension Center</td>
-                <td>
-                    <input type="radio" name="ref-no" checked>No
-                    <input type="radio" name="ref-no">Yes
-                </td>
-            </tr>
-            <tr>
-                <td>1.1</td>
-                <td>Whether Applied Previously in CCC Examination</td>
-                <td>
-                    <input type="radio" name="applied" checked>NO
-                    <input type="radio" name="applied">Yes
+                <td colspan="2" align="center">
+                    <input type="submit" value="Submit">
+                    <input type="reset" value="Reset">
                 </td>
             </tr>
         </table>
-       </fieldset>
-       <fieldset>
-        <legend>2.Applicant's Personal Details</legend>
-        <table bgcolor="#dae7f5" cellpadding="10px" cellspacing="2" border>
-            <tr>
-                <td>2.1</td>
-                <td>Applicant Full Name</td>
-                <td>
-                    <select>
-                        <option>~Select~</option>
-                        <option>Mr</option>
-                        <option>Mrs</option>
-                    </select>
-                    <input type="text"><br>
-                    (Full name as per highest/latest qualification certificate or legal certificate)
-                </td>
-            </tr>
-            <tr bgcolor="#c5d2e0">
-                <td>2.2</td>
-                <td>Care of</td>
-                <td>
-                    <input type="radio" name="care" checked>Parents
-                    <input type="radio" name="care">Guardian
-                </td>
-            </tr>
-            <tr>
-                <td>2.2.1</td>
-                <td>Father's Name</td>
-                <td>
-                    <select>
-                        <option>Mr</option>
-                    </select>
-                    <input type="text"><br>
-                    <font color="red" size="2px">(Full name As Per Educational/Legal Certificate)</font>
-                </td>
-            </tr>
-            <tr bgcolor="#c5d2e0">
-                <td>2.2.2</td>
-                <td>Mother's Name</td>
-                <td>
-                    <select>
-                        <option>Mrs</option>
-                    </select>
-                    <input type="text"><br>
-                    <font color="red" size="2px">(Full name As Per Educational/Legal Certificate)</font>
-                </td>
-            </tr>
-            <tr>
-                <td>2.3</td>
-                <td>Gender</td>
-                <td>
-                    <select>
-                        <option>--Select Gender--</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                    </select>
-                </td>
-            </tr>
-            <tr bgcolor="#c5d2e0">
-                <td>2.4</td>
-                <td>Date of Birth</td>
-                <td>
-                    <input type="date"><br>
-                    (As per high school certificate in 'mm-dd-yyyy' format.i.e.'Jan-01-1990')
-                </td>
-            </tr>
-            <tr>
-                <td>2.5</td>
-                <td>Category</td>
-                <td>
-                    <select>
-                        <option value="">--Select One--</option>
-                        <option value="">General</option>
-                        <option value="">Scheduled Caste</option>
-                        <option value="">Scheduled Tribe</option>
-                        <option value="">Other Backward Class</option>
-                    </select>
-                </td>
-            </tr>
-            <tr bgcolor="#c5d2e0">
-                 <td>2.6</td>
-                <td>Occupation</td>
-                <td><select>
-                    <option value="">--Select One--</option>
-                    <option value="">Government Employee</option>
-                    <option value="">Government Undertaking</option>
-                    <option value="">Self Employed</option>
-                    <option value="">Others</option>
-                </select></td>
-            </tr>
-            <tr>
-                <td>2.7</td>
-                <td>Disability</td>
-                <td>
-                    <input type="radio" name="disability" checked>No
-                    <input type="radio" name="disability">Yes
-                </td>
-            </tr>
-            <tr>
-                <td>2.8</td>
-                <td>EWS</td>
-                <td>
-                    <input type="radio" name="ews" checked>No
-                    <input type="radio" name="ews">Yes
-                </td>
-            </tr>
-        </table>
-       </fieldset>
     </form>
+    
+    <hr size="5" width="100%" color="darkblue" noshade>
+    <center>
+        <font size="2"> 2025 NIELIT - All Rights Reserved</font>
+    </center>
 </body>
 </html>
