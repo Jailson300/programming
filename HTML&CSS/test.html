@@ -1,71 +1,465 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swiper Slideshow</title>
-  <!-- Swiper CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      background: #111;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe Staff Order System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, onSnapshot, collection, query, where, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    .swiper {
-      width: 100%;
-      height: 100vh;
-    }
+        // Global variables provided by the environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : '';
 
-    .swiper-slide {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      color: #fff;
-    }
+        // Initialize Firebase
+        let app, db, auth;
+        let staffId = null;
+        let currentView = 'order';
+        let currentOrder = {
+            items: {},
+            total: 0,
+            status: 'pending'
+        };
+        let menuItems = [];
 
-    .slide1 { background: #ff4d4d; }
-    .slide2 { background: #4d79ff; }
-    .slide3 { background: #4dff88; }
-  </style>
+        // --- Utility Functions ---
+
+        function showMessage(message) {
+            const messageBox = document.getElementById('message-box');
+            const messageText = document.getElementById('message-text');
+            messageText.textContent = message;
+            messageBox.classList.remove('hidden');
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 3000);
+        }
+
+        // --- Firebase Initialization and Data Loading ---
+
+        async function initializeFirebase() {
+            try {
+                if (Object.keys(firebaseConfig).length > 0) {
+                    app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+
+                    onAuthStateChanged(auth, async (user) => {
+                        if (user) {
+                            staffId = user.uid;
+                            document.getElementById('staff-id-display').textContent = `Staff ID: ${staffId}`;
+                            document.getElementById('loading-indicator').classList.add('hidden');
+                            await loadMenu();
+                            render();
+                            setupRealtimeOrderListener();
+                        } else {
+                            staffId = null;
+                            if (initialAuthToken) {
+                                await signInWithCustomToken(auth, initialAuthToken);
+                            } else {
+                                await signInAnonymously(auth);
+                            }
+                        }
+                    });
+                } else {
+                    showMessage("Firebase configuration is missing.");
+                    document.getElementById('loading-indicator').classList.add('hidden');
+                }
+            } catch (error) {
+                console.error("Error initializing Firebase:", error);
+                showMessage("Error initializing the app. Check console for details.");
+            }
+        }
+
+        async function loadMenu() {
+            try {
+                const menuCollection = collection(db, `/artifacts/${appId}/public/data/menu`);
+                const q = query(menuCollection);
+                const querySnapshot = await getDocs(q);
+                
+                // Pre-populate menu if it's empty
+                if (querySnapshot.empty) {
+                    const defaultMenu = [
+                        { name: "Espresso", description: "A strong shot of coffee.", price: 2.50, stock: 50 },
+                        { name: "Latte", description: "Espresso with steamed milk and a light layer of foam.", price: 4.00, stock: 50 },
+                        { name: "Cappuccino", description: "Espresso with a rich, thick layer of milk foam.", price: 4.50, stock: 50 },
+                        { name: "Croissant", description: "A buttery, flaky pastry.", price: 3.00, stock: 25 },
+                        { name: "Muffin", description: "Baked goodness with chocolate chips.", price: 3.25, stock: 25 },
+                        { name: "Iced Tea", description: "Refreshing black tea served over ice.", price: 3.00, stock: 30 }
+                    ];
+                    for (const item of defaultMenu) {
+                        await addDoc(menuCollection, item);
+                    }
+                }
+                const updatedQuerySnapshot = await getDocs(q);
+                menuItems = updatedQuerySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderMenu();
+            } catch (error) {
+                console.error("Error loading menu:", error);
+                showMessage("Failed to load menu. Please try again later.");
+            }
+        }
+
+        // --- Order Taking View Logic ---
+
+        function renderMenu(searchTerm = '') {
+            const menuContainer = document.getElementById('menu-list');
+            menuContainer.innerHTML = '';
+            const filteredItems = menuItems.filter(item => 
+                item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                item.description.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            if (filteredItems.length === 0) {
+                menuContainer.innerHTML = '<p class="text-center text-gray-500 text-lg py-8">No matching items found.</p>';
+                return;
+            }
+
+            filteredItems.forEach(item => {
+                const itemElement = document.createElement('div');
+                const outOfStock = item.stock <= 0;
+                itemElement.className = `bg-white p-6 rounded-xl shadow-lg flex justify-between items-center transform transition-transform duration-200 cursor-pointer ${outOfStock ? 'opacity-50' : 'hover:scale-105'}`;
+                itemElement.innerHTML = `
+                    <div>
+                        <h3 class="font-bold text-xl text-gray-800">${item.name}</h3>
+                        <p class="text-gray-600 mt-1">${item.description}</p>
+                        <p class="text-indigo-600 font-bold mt-3 text-lg">$${item.price.toFixed(2)}</p>
+                    </div>
+                    ${outOfStock ? '<span class="text-red-500 font-bold text-lg">Out of Stock</span>' : ''}
+                `;
+                if (!outOfStock) {
+                    itemElement.addEventListener('click', () => {
+                        addToOrder(item);
+                    });
+                }
+                menuContainer.appendChild(itemElement);
+            });
+        }
+
+        function addToOrder(item) {
+            if (item.stock <= 0) {
+                showMessage(`${item.name} is out of stock.`);
+                return;
+            }
+
+            if (currentOrder.items[item.id]) {
+                currentOrder.items[item.id].quantity++;
+            } else {
+                currentOrder.items[item.id] = {
+                    name: item.name,
+                    price: item.price,
+                    quantity: 1,
+                    id: item.id
+                };
+            }
+            currentOrder.total += item.price;
+            renderCart();
+            showMessage(`${item.name} added to order!`);
+        }
+
+        function renderCart() {
+            const cartList = document.getElementById('cart-list');
+            const cartTotal = document.getElementById('cart-total');
+            cartList.innerHTML = '';
+            const itemIds = Object.keys(currentOrder.items);
+            if (itemIds.length > 0) {
+                itemIds.forEach(id => {
+                    const item = currentOrder.items[id];
+                    const cartItem = document.createElement('li');
+                    cartItem.className = "flex justify-between items-center py-2 border-b last:border-b-0";
+                    cartItem.innerHTML = `
+                        <span class="text-gray-800">${item.name} x ${item.quantity}</span>
+                        <span class="font-semibold text-gray-700">$${(item.price * item.quantity).toFixed(2)}</span>
+                    `;
+                    cartList.appendChild(cartItem);
+                });
+                cartTotal.textContent = `Total: $${currentOrder.total.toFixed(2)}`;
+            } else {
+                cartList.innerHTML = '<li class="text-center text-gray-500 py-4">Current order is empty.</li>';
+                cartTotal.textContent = 'Total: $0.00';
+            }
+        }
+
+        async function submitOrder() {
+            const orderItemsArray = Object.values(currentOrder.items).map(item => ({
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity
+            }));
+            if (orderItemsArray.length === 0) {
+                showMessage("Order is empty. Add items to place an order.");
+                return;
+            }
+
+            try {
+                document.getElementById('place-order-button').disabled = true;
+                const ordersCollection = collection(db, `/artifacts/${appId}/public/data/staff_orders`);
+                await addDoc(ordersCollection, {
+                    items: orderItemsArray,
+                    total: currentOrder.total,
+                    status: 'pending',
+                    timestamp: new Date(),
+                    staffId: staffId
+                });
+
+                // Update stock levels for each item in the order
+                for (const item of Object.values(currentOrder.items)) {
+                    const itemRef = doc(db, `/artifacts/${appId}/public/data/menu`, item.id);
+                    const docSnap = await getDoc(itemRef);
+                    if (docSnap.exists()) {
+                        const newStock = Math.max(0, docSnap.data().stock - item.quantity);
+                        await updateDoc(itemRef, { stock: newStock });
+                    }
+                }
+
+                showMessage("Order placed successfully!");
+                currentOrder = { items: {}, total: 0, status: 'pending' };
+                renderCart();
+            } catch (error) {
+                console.error("Error submitting order:", error);
+                showMessage("Failed to place order. Please try again.");
+            } finally {
+                document.getElementById('place-order-button').disabled = false;
+            }
+        }
+
+        // --- Order Management View Logic ---
+
+        let orders = [];
+
+        async function setupRealtimeOrderListener() {
+            const ordersCollection = collection(db, `/artifacts/${appId}/public/data/staff_orders`);
+            onSnapshot(ordersCollection, (snapshot) => {
+                orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderAdminOrders();
+            }, (error) => {
+                console.error("Error listening to orders:", error);
+                showMessage("Failed to load orders. Check console for details.");
+            });
+        }
+
+        function renderAdminOrders() {
+            const adminList = document.getElementById('admin-order-list');
+            adminList.innerHTML = '';
+            const pendingOrders = orders.filter(order => order.status === 'pending');
+            if (pendingOrders.length === 0) {
+                adminList.innerHTML = '<p class="text-center text-gray-500 text-lg py-8">No pending orders.</p>';
+            }
+            
+            pendingOrders.sort((a, b) => b.timestamp.toMillis() - a.timestamp.toMillis());
+            
+            pendingOrders.forEach(order => {
+                const orderElement = document.createElement('div');
+                orderElement.className = "bg-white p-6 rounded-xl shadow-md mb-6 flex flex-col lg:flex-row justify-between items-start lg:items-center";
+                
+                const itemsListHtml = order.items.map(item => `
+                    <li class="list-disc ml-6 text-sm text-gray-700">${item.name} x ${item.quantity} ($${(item.price * item.quantity).toFixed(2)})</li>
+                `).join('');
+
+                const statusBadge = `<span class="px-3 py-1 text-xs rounded-full font-bold bg-orange-100 text-orange-600">${order.status.toUpperCase()}</span>`;
+
+                orderElement.innerHTML = `
+                    <div class="flex-grow w-full">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3">
+                            <h3 class="font-bold text-lg text-gray-800">Order ID: <span class="text-indigo-600 font-mono">${order.id.substring(0, 8)}</span></h3>
+                            <span class="text-sm text-gray-500 mt-1 sm:mt-0 font-mono">Staff ID: ${order.staffId.substring(0, 10)}...</span>
+                        </div>
+                        <ul class="mb-4">
+                            ${itemsListHtml}
+                        </ul>
+                        <p class="text-gray-800 font-bold text-base md:text-lg">Total: $${order.total.toFixed(2)}</p>
+                        <p class="text-sm text-gray-500 mt-2 flex items-center">Status: <span class="ml-2">${statusBadge}</span></p>
+                    </div>
+                    <div class="mt-4 lg:mt-0 flex-shrink-0">
+                        <button class="complete-button bg-green-600 text-white px-6 py-2.5 rounded-full font-semibold shadow-md hover:bg-green-700 transition-colors duration-200" data-id="${order.id}">Mark Complete</button>
+                    </div>
+                `;
+                adminList.appendChild(orderElement);
+            });
+            document.querySelectorAll('.complete-button').forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const orderId = e.target.dataset.id;
+                    try {
+                        const orderRef = doc(db, `/artifacts/${appId}/public/data/staff_orders`, orderId);
+                        await updateDoc(orderRef, { status: 'completed' });
+                        showMessage("Order marked as complete!");
+                    } catch (error) {
+                        console.error("Error marking order complete:", error);
+                        showMessage("Failed to update order status.");
+                    }
+                });
+            });
+        }
+
+        // --- Inventory Management View Logic ---
+
+        function renderInventory() {
+            const inventoryList = document.getElementById('inventory-list');
+            inventoryList.innerHTML = '';
+            menuItems.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = "bg-white p-6 rounded-xl shadow-md flex justify-between items-center mb-4";
+                itemElement.innerHTML = `
+                    <div class="flex-grow">
+                        <h3 class="font-bold text-lg text-gray-800">${item.name}</h3>
+                        <p class="text-gray-600">Current Stock: <span class="font-semibold text-indigo-600">${item.stock}</span></p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button class="stock-btn bg-red-500 text-white w-8 h-8 rounded-full font-bold shadow-md hover:bg-red-600" data-id="${item.id}" data-change="-1">-</button>
+                        <button class="stock-btn bg-green-500 text-white w-8 h-8 rounded-full font-bold shadow-md hover:bg-green-600" data-id="${item.id}" data-change="1">+</button>
+                    </div>
+                `;
+                inventoryList.appendChild(itemElement);
+            });
+            document.querySelectorAll('.stock-btn').forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const itemId = e.target.dataset.id;
+                    const change = parseInt(e.target.dataset.change);
+                    const itemRef = doc(db, `/artifacts/${appId}/public/data/menu`, itemId);
+                    
+                    try {
+                        const docSnap = await getDoc(itemRef);
+                        if (docSnap.exists()) {
+                            const currentStock = docSnap.data().stock;
+                            const newStock = Math.max(0, currentStock + change);
+                            await updateDoc(itemRef, { stock: newStock });
+                            showMessage(`Stock for ${docSnap.data().name} updated to ${newStock}.`);
+                        }
+                    } catch (error) {
+                        console.error("Error updating stock:", error);
+                        showMessage("Failed to update stock.");
+                    }
+                });
+            });
+        }
+        
+        // --- Navigation and Rendering ---
+
+        function render() {
+            const orderPage = document.getElementById('order-page');
+            const managePage = document.getElementById('manage-page');
+            const inventoryPage = document.getElementById('inventory-page');
+            const orderTab = document.getElementById('order-tab');
+            const manageTab = document.getElementById('manage-tab');
+            const inventoryTab = document.getElementById('inventory-tab');
+
+            [orderPage, managePage, inventoryPage].forEach(page => page.classList.add('hidden'));
+            [orderTab, manageTab, inventoryTab].forEach(tab => {
+                tab.classList.remove('text-white', 'bg-indigo-600');
+                tab.classList.add('text-gray-300');
+            });
+            
+            if (currentView === 'order') {
+                orderPage.classList.remove('hidden');
+                orderTab.classList.add('text-white', 'bg-indigo-600');
+            } else if (currentView === 'manage') {
+                managePage.classList.remove('hidden');
+                manageTab.classList.add('text-white', 'bg-indigo-600');
+                renderAdminOrders();
+            } else if (currentView === 'inventory') {
+                inventoryPage.classList.remove('hidden');
+                inventoryTab.classList.add('text-white', 'bg-indigo-600');
+                renderInventory();
+            }
+        }
+
+        document.getElementById('order-tab').addEventListener('click', () => {
+            currentView = 'order';
+            render();
+        });
+
+        document.getElementById('manage-tab').addEventListener('click', () => {
+            currentView = 'manage';
+            render();
+        });
+
+        document.getElementById('inventory-tab').addEventListener('click', () => {
+            currentView = 'inventory';
+            render();
+        });
+        
+        document.getElementById('place-order-button').addEventListener('click', submitOrder);
+        
+        document.getElementById('menu-search').addEventListener('input', (e) => {
+            renderMenu(e.target.value);
+        });
+        
+        window.onload = initializeFirebase;
+    </script>
 </head>
-<body>
-  <!-- Swiper Container -->
-  <div class="swiper">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide slide1"><img src="nielit.jpg" alt=""></div>
-      <div class="swiper-slide slide2"><img src="Picsart_25-03-21_15-32-29-435.png" alt=""></div>
-      <div class="swiper-slide slide3"><img src="images.jpg" alt=""></div>
-    </div>
-    <!-- Pagination -->
-    <div class="swiper-pagination"></div>
-    <!-- Navigation buttons -->
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-  </div>
+<body class="bg-gray-100 font-sans leading-relaxed text-gray-900">
 
-  <!-- Swiper JS -->
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script>
-    const swiper = new Swiper('.swiper', {
-      loop: true,
-      autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      effect: 'slide', // You can try 'fade', 'cube', 'coverflow'
-    });
-  </script>
+    <!-- Message Box -->
+    <div id="message-box" class="fixed top-5 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-center px-6 py-4 rounded-xl shadow-lg z-50 hidden transition-opacity duration-300">
+        <span id="message-text" class="text-sm font-semibold"></span>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loading-indicator" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-500"></div>
+    </div>
+
+    <!-- Header and Tabs -->
+    <header class="bg-gray-800 text-white py-4 shadow-xl fixed top-0 left-0 right-0 z-40">
+        <div class="container mx-auto px-4 flex items-center justify-between">
+            <h1 class="text-3xl font-bold tracking-tight">Staff Order App</h1>
+            <div class="flex items-center space-x-6">
+                <button id="order-tab" class="px-5 py-2.5 rounded-full font-semibold transition-colors duration-200">New Order</button>
+                <button id="manage-tab" class="px-5 py-2.5 rounded-full font-semibold transition-colors duration-200">Manage Orders</button>
+                <button id="inventory-tab" class="px-5 py-2.5 rounded-full font-semibold transition-colors duration-200">Inventory</button>
+                <span id="staff-id-display" class="text-xs text-gray-400 font-mono tracking-wider">Staff ID: ...</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 mt-20">
+        <!-- New Order Page -->
+        <div id="order-page">
+            <h2 class="text-4xl font-extrabold text-gray-800 mb-8 text-center tracking-tight">Create New Order</h2>
+            <div class="mb-8">
+                <input type="text" id="menu-search" placeholder="Search menu items..." class="w-full px-5 py-3 rounded-full shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200">
+            </div>
+            <div id="menu-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Menu items will be rendered here -->
+            </div>
+            
+            <div class="fixed bottom-0 left-0 right-0 bg-white p-6 shadow-2xl rounded-t-3xl z-30">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Current Order</h3>
+                <ul id="cart-list" class="max-h-36 overflow-y-auto mb-4 border-b border-gray-200">
+                    <!-- Cart items will be rendered here -->
+                </ul>
+                <div class="flex justify-between items-center mt-4">
+                    <span id="cart-total" class="text-xl font-bold text-gray-800">Total: $0.00</span>
+                    <button id="place-order-button" class="bg-green-600 text-white px-8 py-4 rounded-full font-extrabold shadow-lg hover:bg-green-700 transition-colors duration-200 transform hover:scale-105">
+                        Place Order
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Orders Page -->
+        <div id="manage-page" class="hidden">
+            <h2 class="text-4xl font-extrabold text-gray-800 mb-8 text-center tracking-tight">Manage Orders</h2>
+            <div class="bg-gray-200 p-8 rounded-2xl shadow-inner">
+                <h3 class="text-2xl font-bold mb-6 text-gray-800">Pending Orders</h3>
+                <div id="admin-order-list">
+                    <!-- Orders will be rendered here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Page -->
+        <div id="inventory-page" class="hidden">
+            <h2 class="text-4xl font-extrabold text-gray-800 mb-8 text-center tracking-tight">Manage Inventory</h2>
+            <div class="bg-gray-200 p-8 rounded-2xl shadow-inner">
+                <div id="inventory-list">
+                    <!-- Inventory items will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
