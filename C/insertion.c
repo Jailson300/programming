@@ -27,7 +27,7 @@ void insertion_sort(int arr[],int n){
     for(i=0;i<n;i++){
         temp=arr[i];
         j=i-1;
-        while((temp<arr[j])&&(j>=0)){
+        while(((j>=0) && temp<arr[j])){
             arr[j+1]=arr[j];
             j--;
         }
